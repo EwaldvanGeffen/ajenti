@@ -29,7 +29,7 @@ class RAIDAdapter (object):
 
 @plugin
 class RAIDManager (BasePlugin):
-    cli_path = '/opt/MegaRAID/MegaCli/MegaCli'
+    cli_path = '/usr/sbin/megacli'
 
     def __init__(self):
         self.refresh()
@@ -56,6 +56,7 @@ class RAIDManager (BasePlugin):
                 current_adapter.arrays.append(current_array)
                 current_disk = None
                 current_array.id = l.split()[2]
+                current_array.name = 'Logical volume: ' + current_array.id
                 continue
             if l.startswith('PD:'):
                 current_disk = RAIDDevice()
@@ -66,8 +67,11 @@ class RAIDManager (BasePlugin):
                 k = k.strip().lower().replace(' ', '_')
                 v = v.strip()
                 o = current_disk or current_array or current_adapter
-                setattr(o, k, v)
-
+                if k != 'name':
+                    setattr(o, k, v)
+                elif v != '':
+                    setattr(o, k, v)
+					
     def find_array(self, name):
         for a in self.adapters:
             for arr in a.arrays:
