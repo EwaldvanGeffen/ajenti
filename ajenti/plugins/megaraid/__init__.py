@@ -8,7 +8,7 @@ info = PluginInfo(
     icon='hdd',
     dependencies=[
         PluginDependency('main'),
-        FileDependency('/opt/MegaRAID/MegaCli/MegaCli'),
+        FileDependency('/usr/sbin/megacli'),
     ],
 )
 
